@@ -1,5 +1,9 @@
 # Command to deploy the function with Event Arc
 
+The Medium article for this use case : 
+
+https://medium.com/@mazlum.tosun/event-driven-cloud-function-load-gcs-file-to-bigquery-with-event-arc-a1540c1d2055
+
 ## Before to begin, check this link : 
 
 https://cloud.google.com/eventarc/docs/run/create-trigger-storage-gcloud#before-you-begin
