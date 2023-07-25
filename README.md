@@ -1,8 +1,24 @@
 # Command to deploy the function with Event Arc
 
+This project shows a complete use case with an event driven Cloud Function written in Python and triggered with 
+Event Arc
+
+![event_driven_cloud_function.png](diagram%2Fevent_driven_cloud_function.png)
+
 The Medium article for this use case : 
 
 https://medium.com/@mazlum.tosun/event-driven-cloud-function-load-gcs-file-to-bigquery-with-event-arc-a1540c1d2055
+
+The videos in English :
+
+https://youtu.be/mKsrH-j8IUY
+https://youtu.be/BeNhsW4Mfrk
+https://youtu.be/n_zmF-Zy3R4
+
+The videos in French :
+
+https://youtu.be/J8eH4bZVX9s
+https://youtu.be/i8DsJp_vHMc
 
 ## Before to begin, check this link : 
 
@@ -73,6 +89,53 @@ gcloud builds submit \
     --config terraform-apply-modules.yaml \
     --substitutions _ENV=dev,_TF_STATE_BUCKET=$TF_STATE_BUCKET,_TF_STATE_PREFIX=$TF_STATE_PREFIX,_GOOGLE_PROVIDER_VERSION=$GOOGLE_PROVIDER_VERSION \
     --verbosity="debug" .
+```
+
+## Build from the project hosted in a GITHUB repository
+
+### Plan
+
+```shell
+gcloud beta builds triggers create manual \
+  --project=$PROJECT_ID \
+  --region=$LOCATION \
+  --name="terraform-plan-function" \
+  --repo="https://github.com/tosun-si/event-arc-trigger-function" \
+  --repo-type="GITHUB" \
+  --branch="main" \
+  --build-config="terraform-plan-modules.yaml" \
+  --substitutions _ENV=dev,_TF_STATE_BUCKET=$TF_STATE_BUCKET,_TF_STATE_PREFIX=$TF_STATE_PREFIX,_GOOGLE_PROVIDER_VERSION=$GOOGLE_PROVIDER_VERSION \
+  --verbosity="debug"
+```
+
+### Apply
+
+```shell
+gcloud beta builds triggers create manual \
+  --project=$PROJECT_ID \
+  --region=$LOCATION \
+  --name="terraform-apply-function" \
+  --repo="https://github.com/tosun-si/event-arc-trigger-function" \
+  --repo-type="GITHUB" \
+  --branch="main" \
+  --build-config="terraform-apply-modules.yaml" \
+  --substitutions _ENV=dev,_TF_STATE_BUCKET=$TF_STATE_BUCKET,_TF_STATE_PREFIX=$TF_STATE_PREFIX,_GOOGLE_PROVIDER_VERSION=$GOOGLE_PROVIDER_VERSION \
+  --verbosity="debug"
+```
+
+### Destroy
+
+```shell
+gcloud beta builds triggers create manual \
+  --project=$PROJECT_ID \
+  --region=$LOCATION \
+  --name="terraform-destroy" \
+  --repo="https://github.com/tosun-si/sa-custom-roles-gcp-terraform" \
+  --repo-type="GITHUB" \
+  --branch="main" \
+  --build-config="terraform-destroy-modules.yaml" \
+  --substitutions _ENV=dev,_TF_STATE_BUCKET=$TF_STATE_BUCKET,_TF_STATE_PREFIX=$TF_STATE_PREFIX,_GOOGLE_PROVIDER_VERSION=$GOOGLE_PROVIDER_VERSION \
+  --verbosity="debug"
 ```
 
 ## Interesting links
